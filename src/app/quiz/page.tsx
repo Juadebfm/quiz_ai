@@ -155,7 +155,9 @@ export default function Home() {
             )?.answerText
           }
         />
-        <Button onClick={handleNext}>{!started ? "Start" : "Next"}</Button>
+        <Button variant="neo" size="lg" onClick={handleNext}>
+          {!started ? "Start" : "Next"}
+        </Button>
       </footer>
     </div>
   );
