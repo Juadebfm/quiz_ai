@@ -3,13 +3,14 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ProgressBar from "@/components/progressBar";
 import { ChevronLeft, X } from "lucide-react";
+import ResultCard from "./ResultCard";
 
 const questions = [
   {
     questionText: "What is React?",
     answers: [
       {
-        answerText: "A Library for building user interfaces",
+        answerText: "A Library for building user faces",
         isCorrect: false,
         id: 1,
       },
@@ -24,7 +25,7 @@ const questions = [
         id: 3,
       },
       {
-        answerText: "A Library for building user interfaces",
+        answerText: "A Library for building user cars",
         isCorrect: false,
         id: 4,
       },
@@ -33,17 +34,17 @@ const questions = [
   {
     questionText: "What is HTML?",
     answers: [
-      { answerText: "Hyper Text Markup Language", isCorrect: false, id: 1 },
+      { answerText: "Hyper Text Markup Language", isCorrect: true, id: 1 },
       { answerText: "Hypertext Markup Laptop", isCorrect: false, id: 2 },
-      { answerText: "Hyper Tool Markup Language", isCorrect: true, id: 3 },
+      { answerText: "Hyper Tool Markup Language", isCorrect: false, id: 3 },
       { answerText: "Hyper Text Markup Laptop", isCorrect: false, id: 4 },
     ],
   },
   {
     questionText: "What is CSS?",
     answers: [
-      { answerText: "Cascading Style Sheets", isCorrect: false, id: 1 },
-      { answerText: "Cascading Styling System", isCorrect: true, id: 2 },
+      { answerText: "Cascading Style Sheets", isCorrect: true, id: 1 },
+      { answerText: "Cascading Styling System", isCorrect: false, id: 2 },
       { answerText: "Cascading System Sheets", isCorrect: false, id: 3 },
       { answerText: "Cascading Style Software", isCorrect: false, id: 4 },
     ],
@@ -60,9 +61,9 @@ const questions = [
   {
     questionText: "What is Node.js?",
     answers: [
-      { answerText: "A JavaScript runtime", isCorrect: false, id: 1 },
+      { answerText: "A JavaScript runtime", isCorrect: true, id: 1 },
       { answerText: "A server-side language", isCorrect: false, id: 2 },
-      { answerText: "A front-end framework", isCorrect: true, id: 3 },
+      { answerText: "A front-end framework", isCorrect: false, id: 3 },
       { answerText: "A database management system", isCorrect: false, id: 4 },
     ],
   },
@@ -93,16 +94,19 @@ export default function Home() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
+
+    setSelectedAnswer(null);
+    setIsCorrect(null);
   };
 
-  const handleAnswer = () => {
-    setSelectedAnswer(answer.id)
+  const handleAnswer = (answer) => {
+    setSelectedAnswer(answer.id);
     const isCurrentCorrect = answer.isCorrect;
-    if(isCurrentCorrect) {
+    if (isCurrentCorrect) {
       setScore(score + 1);
     }
-    setIsCorrect(isCurrentCorrect)
-  }
+    setIsCorrect(isCurrentCorrect);
+  };
 
   return (
     <div className="flex flex-col flex-1">
@@ -129,7 +133,11 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-6 mt-6">
               {questions[currentQuestion].answers.map((answer) => {
                 return (
-                  <Button key={answer.id} variant={"secondary"}>
+                  <Button
+                    key={answer.id}
+                    variant={"secondary"}
+                    onClick={() => handleAnswer(answer)}
+                  >
                     {answer.answerText}
                   </Button>
                 );
@@ -139,6 +147,14 @@ export default function Home() {
         )}
       </main>
       <footer className="footer pb-9 absolute bottom-0 mb-0 px-6">
+        <ResultCard
+          isCorrect={isCorrect}
+          correctAnswer={
+            questions[currentQuestion].answers.find(
+              (answer) => answer.isCorrect === true
+            )?.answerText
+          }
+        />
         <Button onClick={handleNext}>{!started ? "Start" : "Next"}</Button>
       </footer>
     </div>
